@@ -2,7 +2,21 @@ const express = require('express')
 const tz = require('timezone-support');
 
 const app = express()
+const morgan = require('morgan')
+
+const morgan_custom_format = (tokens, req, res) => {
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens.res(req, res, 'content-length'), '-',
+    tokens['response-time'](req, res), 'ms',
+    JSON.stringify(req.body)
+  ].join(' ')
+}
+
 app.use(express.json())
+app.use(morgan(morgan_custom_format))
 
 let persons = [
   { 
@@ -42,7 +56,6 @@ app.get('/info', (request,response) => {
 
   //formatting time
   const currentDate = new Date();
-  console.log(currentDate.toUTCString())
   const serverTimeZoneOffset = currentDate.getTimezoneOffset();
   const offsetHours = Math.abs(serverTimeZoneOffset) / 60;
   const offsetSign = serverTimeZoneOffset < 0 ? '+' : '-';
