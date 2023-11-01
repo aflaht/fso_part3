@@ -1,8 +1,8 @@
 const express = require('express')
 const tz = require('timezone-support');
-
 const app = express()
 const morgan = require('morgan')
+const cors = require('cors')
 
 const morgan_custom_format = (tokens, req, res) => {
   return [
@@ -15,8 +15,10 @@ const morgan_custom_format = (tokens, req, res) => {
   ].join(' ')
 }
 
+app.use(cors())
 app.use(express.json())
 app.use(morgan(morgan_custom_format))
+app.use(express.static('dist'))
 
 let persons = [
   { 
@@ -102,7 +104,7 @@ app.post('/api/persons', (request, response) => {
 })
 
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
