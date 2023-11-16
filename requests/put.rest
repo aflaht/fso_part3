@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/persons/65555158b5016e2ee272782e
+content-type: application/json
+
+{
+    "name": "Eren Batagor",
+    "number": "123-456-777-888-999"
+}
