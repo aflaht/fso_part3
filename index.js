@@ -1,6 +1,6 @@
 require('dotenv').config()
 const express = require('express')
-const tz = require('timezone-support');
+const tz = require('timezone-support')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
@@ -57,34 +57,34 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.get('/info', (request,response) => {
   Person.find({}).then(persons => {
-    totalPerson = persons.length
+    const totalPerson = persons.length
 
     //formatting time
-    const currentDate = new Date();
-    const serverTimeZoneOffset = currentDate.getTimezoneOffset();
-    const offsetHours = Math.abs(serverTimeZoneOffset) / 60;
-    const offsetSign = serverTimeZoneOffset < 0 ? '+' : '-';
-    const offsetString = `GMT ${offsetSign}${offsetHours.toString().padStart(3, '0')}`;
+    const currentDate = new Date()
+    const serverTimeZoneOffset = currentDate.getTimezoneOffset()
+    const offsetHours = Math.abs(serverTimeZoneOffset) / 60
+    const offsetSign = serverTimeZoneOffset < 0 ? '+' : '-'
+    const offsetString = `GMT ${offsetSign}${offsetHours.toString().padStart(3, '0')}`
     const options = {
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       weekday: 'short',
       month: 'short',
       day: 'numeric',
       year: 'numeric',
-      hour: 'numeric', 
+      hour: 'numeric',
       minute: 'numeric',
       second: 'numeric',
-    };
-    const timezoneName = tz.findTimeZone(options.timeZone).name;
-    const formattedDateTime = currentDate.toLocaleString('en-GB', options);
-    
+    }
+    const timezoneName = tz.findTimeZone(options.timeZone).name
+    const formattedDateTime = currentDate.toLocaleString('en-GB', options)
+
     response.send(`<p>Phonebook has info for ${totalPerson} people<br/>${formattedDateTime} ${offsetString} ${timezoneName}</p>`)
   })
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -112,10 +112,10 @@ app.put('/api/persons/:id', (request, response, next) => {
   }
 
   Person.findByIdAndUpdate(
-      request.params.id, 
-      person, 
-      { new: true, runValidators: true, context: 'query' }
-    )
+    request.params.id,
+    person,
+    { new: true, runValidators: true, context: 'query' }
+  )
     .then(updatedPerson => {
       response.json(updatedPerson)
     })

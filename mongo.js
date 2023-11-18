@@ -31,9 +31,9 @@ person.save().then(result => {
   console.log(`added ${result.name} number ${result.number} to phonebook`)
   console.log('phonebook:')
   Person
-  .find({})
-  .then(persons => {
-    persons.map(p => console.log(`${p.name} ${p.number}`))
-    mongoose.connection.close()
-  })
+    .find({})
+    .then(persons => {
+      persons.map(p => console.log(`${p.name} ${p.number}`))
+      mongoose.connection.close()
+    })
 })
